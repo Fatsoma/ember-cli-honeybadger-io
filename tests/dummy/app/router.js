@@ -7,6 +7,8 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('ember-onerror');
+  this.route('rsvp-onerror');
 });
 
 export default Router;

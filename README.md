@@ -1,27 +1,70 @@
-# ember-cli-honeybadger-io
+# ember-cli-honeybadger-io [![CircleCI](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io.svg?style=svg)](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io)
 
-This README outlines the details of collaborating on this Ember addon.
+Error tracking with <https://www.honeybadger.io/> 
 
-## Installation
+honeybadger.js docs <https://github.com/honeybadger-io/honeybadger-js>
 
-* `git clone <repository-url>` this repository
-* `cd ember-cli-honeybadger-io`
-* `npm install`
-* `bower install`
+Install the addon:
 
-## Running
+```sh
+ember install ember-cli-honeybadger-io
+```
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+## Configuration
 
-## Running Tests
+For more options see honeybadger.js docs.
 
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+`config/environment.js`
 
-## Building
+```js
+ENV.honeybadger = {
+  apiKey: 'project api key'
+}
+```
 
-* `ember build`
+```sh
+ember g instance-initializer honeybadger
+```
 
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+`instance-initializers/honeybadger.js`
+
+```js
+import Ember from 'ember';
+
+const { RSVP, set } = Ember;
+
+export function initialize(appInstance) {
+  let service = appInstance.lookup('service:honeybadger');
+
+  Ember.onerror = function(error) {
+    service.notify(error);
+  };
+
+  RSVP.on('error', function(error) {
+    service.notify(error);
+  });
+
+  // optional extras/ideas
+  /* let session = appInstance.lookup('service:session');
+
+  set(service, 'beforeNotify', (notice) => {
+    notice.context = {
+      userId: session.userId
+    };
+
+    notice.cookies = document.cookies
+  }); */
+}
+
+export default {
+  name: 'honeybadger',
+  initialize
+};
+
+```
+
+## Notes
+
+honeybadger.js library is lazy loaded when `notify` is invoked on the service for the first time user `jQuery.getScript`.
+
+Addon by [Fatsoma](http://www.fatsoma.com)
