@@ -1,6 +1,6 @@
 # ember-cli-honeybadger-io [![CircleCI](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io.svg?style=svg)](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io)
 
-Error tracking with <https://www.honeybadger.io/> 
+Javascript error tracking with <https://www.honeybadger.io> 
 
 honeybadger.js docs <https://github.com/honeybadger-io/honeybadger-js>
 

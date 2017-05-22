@@ -1,9 +1,10 @@
 {
   "name": "ember-cli-honeybadger-io",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0",
+  "description": "Javascript error tracking with https://www.honeybadger.io",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "honeybadger"
   ],
   "license": "MIT",
   "author": "",
@@ -49,5 +50,9 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Fatsoma/ember-cli-honeybadger-io/issues"
+  },
+  "homepage": "https://github.com/Fatsoma/ember-cli-honeybadger-io"
 }
