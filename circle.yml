@@ -1,0 +1,14 @@
+machine:
+  node:
+    version: 6.9.4
+  pre:
+    - mkdir -p ~/.yarn-cache
+dependencies:
+  cache_directories:
+    - ~/.yarn-cache
+  override:
+    - yarn install
+test:
+  override:
+    - yarn test
+    
