@@ -67,6 +67,6 @@ export default Ember.Service.extend({
   },
 
   _getScript() {
-    return jQuery.getScript('//js.honeybadger.io/v0.4/honeybadger.min.js');
+    return jQuery.getScript('//js.honeybadger.io/v0.5/honeybadger.min.js');
   },
 });
