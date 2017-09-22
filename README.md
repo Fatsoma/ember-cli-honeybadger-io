@@ -1,6 +1,6 @@
 # ember-cli-honeybadger-io [![CircleCI](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io.svg?style=svg)](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io)
 
-Javascript error tracking with <https://www.honeybadger.io> 
+Javascript error tracking with <https://www.honeybadger.io>
 
 honeybadger.js docs <https://github.com/honeybadger-io/honeybadger-js>
 
@@ -65,6 +65,6 @@ export default {
 
 ## Notes
 
-honeybadger.js library is lazy loaded when `notify` is invoked on the service for the first time user `jQuery.getScript`.
+honeybadger.js is lazy loaded via `service.notify`.
 
 Addon by [Fatsoma](http://www.fatsoma.com)
