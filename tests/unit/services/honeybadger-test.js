@@ -43,7 +43,7 @@ test('When #notify is invoked', function(assert) {
   service.notify(new Error('javascript error')).then(() => {
     assert.ok(
       getScriptStub.calledWith(
-        '//js.honeybadger.io/v0.4/honeybadger.min.js'
+        '//js.honeybadger.io/v0.5/honeybadger.min.js'
       ),
       'It loads honeybadger.js'
     );
