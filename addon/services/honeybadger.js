@@ -43,7 +43,7 @@ export default Ember.Service.extend({
   },
 
   _config() {
-    let config = getOwner(this).resolveRegistration('config:environment');
+    let config = this._resolveConfig();
     let { honeybadger } = config;
 
     assert(
@@ -55,6 +55,10 @@ export default Ember.Service.extend({
       { environment: config.environment },
       honeybadger
     );
+  },
+
+  _resolveConfig() {
+    return getOwner(this).resolveRegistration('config:environment');
   },
 
   _configure() {
