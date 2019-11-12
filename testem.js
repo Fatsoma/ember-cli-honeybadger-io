@@ -1,7 +1,7 @@
 /* eslint-env node */
 
 const path = require('path');
-const existsSync = require('exists-sync');
+const fs = require('fs');
 const mkdirp = require('mkdirp');
 const isCI = !!process.env.CI;
 const scenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
@@ -9,7 +9,7 @@ const scenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
 let testReportsPath = 'test-results';
 let reportFile = path.join(testReportsPath, `${scenario}-test-results.xml`);
 
-if (existsSync(testReportsPath) === false) {
+if (fs.existsSync(testReportsPath) === false) {
   mkdirp.sync(testReportsPath);
 }
 
