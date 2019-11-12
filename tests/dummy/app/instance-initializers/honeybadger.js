@@ -1,4 +1,3 @@
-import RSVP from 'rsvp';
 import Ember from 'ember';
 
 export function initialize(appInstance) {
@@ -7,10 +6,6 @@ export function initialize(appInstance) {
   Ember.onerror = function(error) {
     service.notify(error);
   };
-
-  RSVP.on('error', function(error) {
-    service.notify(error);
-  });
 }
 
 export default {

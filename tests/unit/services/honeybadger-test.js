@@ -1,4 +1,3 @@
-import jQuery from 'jquery';
 import { run } from '@ember/runloop';
 import { module } from 'qunit';
 import { setupTest } from 'ember-qunit';
@@ -11,7 +10,9 @@ module('Unit | Service | honeybadger', function(hooks) {
   test('When #notify is invoked', function(assert) {
     assert.expect(7);
 
-    let getScriptStub = this.stub(jQuery, 'getScript').callsFake(() => {
+    let service = this.owner.lookup('service:honeybadger');
+
+    let getScript = this.stub(service, '_getScript').callsFake(() => {
       return {
         done(callback) {
           window.Honeybadger = {
@@ -24,10 +25,16 @@ module('Unit | Service | honeybadger', function(hooks) {
                 }
               );
 
-              assert.ok(true, 'It invokes #configure on Honeybadger global');
+              assert.ok(
+                true,
+                'It invokes #configure on Honeybadger global'
+              );
             },
             beforeNotify() {
-              assert.ok(true, 'It invokes #beforeNotify on Honeybadger global');
+              assert.ok(
+                true,
+                'It invokes #beforeNotify on Honeybadger global'
+              );
             },
             notify(error) {
               assert.equal(
@@ -35,7 +42,10 @@ module('Unit | Service | honeybadger', function(hooks) {
                 'javascript error'
               )
 
-              assert.ok(true, 'It invokes #notify on Honeybadger global');
+              assert.ok(
+                true,
+                'It invokes #notify on Honeybadger global'
+              );
             }
           }
 
@@ -44,9 +54,10 @@ module('Unit | Service | honeybadger', function(hooks) {
       }
     });
 
-    let service = this.owner.lookup('service:honeybadger');
-
-    let configStub = sinon.stub(service, '_resolveConfig').callsFake(() => {
+    let configStub = sinon.stub(
+      service,
+      '_resolveConfig'
+    ).callsFake(() => {
       return {
         honeybadger: {
           environment: 'test',
@@ -58,9 +69,7 @@ module('Unit | Service | honeybadger', function(hooks) {
     service.notify(new Error('javascript error')).then(() => {
       assert.ok(configStub.calledOnce);
       assert.ok(
-        getScriptStub.calledWith(
-          '//js.honeybadger.io/v0.5/honeybadger.min.js'
-        ),
+        getScript.calledOnce,
         'It loads honeybadger.js'
       );
     });

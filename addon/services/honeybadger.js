@@ -4,7 +4,6 @@ import { assert } from '@ember/debug';
 import { resolve, Promise } from 'rsvp';
 import { run } from '@ember/runloop';
 import { isPresent } from '@ember/utils';
-import jQuery from 'jquery';
 import { getOwner } from '@ember/application';
 import { set } from '@ember/object';
 
@@ -68,6 +67,16 @@ export default Service.extend({
   },
 
   _getScript() {
-    return jQuery.getScript('//js.honeybadger.io/v0.5/honeybadger.min.js');
+    return new Promise((resolve, reject) => {
+      let script = document.createElement('script');
+
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = '//js.honeybadger.io/v2.0/honeybadger.min.js';
+      script.onload = resolve;
+      script.onerror = reject;
+
+      document.getElementsByTagName('head')[0].appendChild(script);
+    });
   },
 });
