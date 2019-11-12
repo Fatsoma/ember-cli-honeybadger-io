@@ -23,8 +23,7 @@ test('When #notify is invoked', function(assert) {
               config,
               {
                 environment: 'test',
-                apiKey: 'test-key',
-                revision: 'test-revision'
+                apiKey: 'test-key'
               }
             );
 
@@ -54,8 +53,7 @@ test('When #notify is invoked', function(assert) {
     return {
       honeybadger: {
         environment: 'test',
-        apiKey: 'test-key',
-        revision: 'test-revision'
+        apiKey: 'test-key'
       }
     };
   });
