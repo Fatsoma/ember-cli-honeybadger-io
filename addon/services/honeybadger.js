@@ -1,19 +1,16 @@
-import Ember from 'ember';
-
-const {
-  merge,
-  assert,
-  RSVP: { Promise, resolve },
-  run,
-  isPresent,
-  $: jQuery,
-  getOwner,
-  set
-} = Ember;
+import Service from '@ember/service';
+import { merge } from '@ember/polyfills';
+import { assert } from '@ember/debug';
+import { resolve, Promise } from 'rsvp';
+import { run } from '@ember/runloop';
+import { isPresent } from '@ember/utils';
+import jQuery from 'jquery';
+import { getOwner } from '@ember/application';
+import { set } from '@ember/object';
 
 const noop = () => {};
 
-export default Ember.Service.extend({
+export default Service.extend({
   init() {
     this._super(...arguments);
     set(this, 'beforeNotify', noop);

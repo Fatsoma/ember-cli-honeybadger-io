@@ -1,6 +1,5 @@
-import Ember from 'ember';
-
-const { Route, RSVP: { reject } } = Ember;
+import Route from '@ember/routing/route';
+import { reject } from 'rsvp';
 
 export default Route.extend({
   model() {
