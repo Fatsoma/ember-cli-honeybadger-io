@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { merge } from '@ember/polyfills';
+import { assign } from '@ember/polyfills';
 import { assert } from '@ember/debug';
 import { resolve, Promise } from 'rsvp';
 import { run } from '@ember/runloop';
@@ -47,7 +47,7 @@ export default Service.extend({
       isPresent(honeybadger.apiKey)
     );
 
-    return merge(
+    return assign(
       { environment: config.environment },
       honeybadger
     );
