@@ -1,10 +1,9 @@
-/* eslint-env node */
 'use strict';
 
 const getRepoInfo = require('git-repo-info');
 
 module.exports = {
-  name: 'ember-cli-honeybadger-io',
+  name: require('./package').name
 
   config(_environment, appConfig) {
     if (!this.app) {
