@@ -31,7 +31,7 @@ export default Service.extend({
     }
 
     return new Promise((resolve/*, reject*/) => {
-      this._getScript().done(() => {
+      this._getScript().then(() => {
         this._configure();
         run(null, resolve);
       });

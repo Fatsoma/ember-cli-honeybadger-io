@@ -1,7 +1,7 @@
-import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import sinon from 'sinon';
+import { resolve } from 'rsvp';
 
 module('Unit | Service | honeybadger', function(hooks) {
   setupTest(hooks);
@@ -12,45 +12,41 @@ module('Unit | Service | honeybadger', function(hooks) {
     let service = this.owner.lookup('service:honeybadger');
 
     let getScript = sinon.stub(service, '_getScript').callsFake(() => {
-      return {
-        done(callback) {
-          window.Honeybadger = {
-            configure(config) {
-              assert.deepEqual(
-                config,
-                {
-                  environment: 'test',
-                  apiKey: 'test-key'
-                }
-              );
-
-              assert.ok(
-                true,
-                'It invokes #configure on Honeybadger global'
-              );
-            },
-            beforeNotify() {
-              assert.ok(
-                true,
-                'It invokes #beforeNotify on Honeybadger global'
-              );
-            },
-            notify(error) {
-              assert.equal(
-                error.message,
-                'javascript error'
-              )
-
-              assert.ok(
-                true,
-                'It invokes #notify on Honeybadger global'
-              );
+      window.Honeybadger = {
+        configure(config) {
+          assert.deepEqual(
+            config,
+            {
+              environment: 'test',
+              apiKey: 'test-key'
             }
-          }
+          );
 
-          run(callback);
+          assert.ok(
+            true,
+            'It invokes #configure on Honeybadger global'
+          );
+        },
+        beforeNotify() {
+          assert.ok(
+            true,
+            'It invokes #beforeNotify on Honeybadger global'
+          );
+        },
+        notify(error) {
+          assert.equal(
+            error.message,
+            'javascript error'
+          )
+
+          assert.ok(
+            true,
+            'It invokes #notify on Honeybadger global'
+          );
         }
       }
+
+      return resolve();
     });
 
     let configStub = sinon.stub(
