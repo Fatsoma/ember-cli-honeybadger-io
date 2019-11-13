@@ -1,7 +1,6 @@
 import { run } from '@ember/runloop';
-import { module } from 'qunit';
+import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import test from 'ember-sinon-qunit/test-support/test';
 import sinon from 'sinon';
 
 module('Unit | Service | honeybadger', function(hooks) {
@@ -12,7 +11,7 @@ module('Unit | Service | honeybadger', function(hooks) {
 
     let service = this.owner.lookup('service:honeybadger');
 
-    let getScript = this.stub(service, '_getScript').callsFake(() => {
+    let getScript = sinon.stub(service, '_getScript').callsFake(() => {
       return {
         done(callback) {
           window.Honeybadger = {
