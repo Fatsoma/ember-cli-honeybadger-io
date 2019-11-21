@@ -1,19 +1,15 @@
-import Ember from 'ember';
-
-const {
-  merge,
-  assert,
-  RSVP: { Promise, resolve },
-  run,
-  isPresent,
-  $: jQuery,
-  getOwner,
-  set
-} = Ember;
+import Service from '@ember/service';
+import { assign } from '@ember/polyfills';
+import { assert } from '@ember/debug';
+import { resolve, Promise } from 'rsvp';
+import { run } from '@ember/runloop';
+import { isPresent } from '@ember/utils';
+import { getOwner } from '@ember/application';
+import { set } from '@ember/object';
 
 const noop = () => {};
 
-export default Ember.Service.extend({
+export default Service.extend({
   init() {
     this._super(...arguments);
     set(this, 'beforeNotify', noop);
@@ -35,7 +31,7 @@ export default Ember.Service.extend({
     }
 
     return new Promise((resolve/*, reject*/) => {
-      this._getScript().done(() => {
+      this._getScript().then(() => {
         this._configure();
         run(null, resolve);
       });
@@ -51,7 +47,7 @@ export default Ember.Service.extend({
       isPresent(honeybadger.apiKey)
     );
 
-    return merge(
+    return assign(
       { environment: config.environment },
       honeybadger
     );
@@ -71,6 +67,16 @@ export default Ember.Service.extend({
   },
 
   _getScript() {
-    return jQuery.getScript('//js.honeybadger.io/v0.5/honeybadger.min.js');
+    return new Promise((resolve, reject) => {
+      let script = document.createElement('script');
+
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = '//js.honeybadger.io/v2.0/honeybadger.min.js';
+      script.onload = resolve;
+      script.onerror = reject;
+
+      document.getElementsByTagName('head')[0].appendChild(script);
+    });
   },
 });
