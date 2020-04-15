@@ -72,7 +72,7 @@ export default Service.extend({
 
       script.type = 'text/javascript';
       script.async = true;
-      script.src = '//js.honeybadger.io/v2.0/honeybadger.min.js';
+      script.src = '//js.honeybadger.io/v2.2/honeybadger.min.js';
       script.onload = resolve;
       script.onerror = reject;
 
