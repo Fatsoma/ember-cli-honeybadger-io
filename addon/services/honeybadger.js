@@ -20,7 +20,9 @@ export default Service.extend({
       () => {
         run(window.Honeybadger, 'notify', error);
       },
-      noop,
+      () => {
+        console.error(`Unable to send error report: ${error}`);
+      },
       'service:honeybadger.notify'
     )
   },
@@ -30,10 +32,12 @@ export default Service.extend({
       return resolve();
     }
 
-    return new Promise((resolve/*, reject*/) => {
+    return new Promise((resolve, reject) => {
       this._getScript().then(() => {
         this._configure();
         run(null, resolve);
+      }).catch((e) => {
+        run(null, reject, e);
       });
     }, 'service:honeybadger:getSDK');
   },

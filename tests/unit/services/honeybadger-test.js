@@ -6,6 +6,10 @@ import { resolve } from 'rsvp';
 module('Unit | Service | honeybadger', function(hooks) {
   setupTest(hooks);
 
+  hooks.afterEach(() => {
+    window.Honeybadger = undefined;
+  });
+
   test('When #notify is invoked', function(assert) {
     assert.expect(7);
 
@@ -66,6 +70,29 @@ module('Unit | Service | honeybadger', function(hooks) {
       assert.ok(
         getScript.calledOnce,
         'It loads honeybadger.js'
+      );
+    });
+  });
+
+  test('On #notify when get script fails', function(assert) {
+    assert.expect(3);
+
+    let service = this.owner.lookup('service:honeybadger');
+
+    let getError = new Error('failed to get script');
+    let getScript = sinon.stub(service, '_getScript').rejects(getError);
+
+    let configureStub = sinon.stub(service, '_configure').returns(null);
+
+    let notifyError = 'Unable to send error report: Error: javascript error';
+    let consoleError = sinon.stub(console, 'error').returns(null);
+
+    service.notify(new Error('javascript error')).then(() => {
+      assert.ok(getScript.calledOnce, 'it tries to laod honeybadger.js');
+      assert.notOk(configureStub.called, 'it does not call configure');
+      assert.ok(
+        consoleError.withArgs(notifyError).calledOnce,
+        'it logs passed error to console'
       );
     });
   });
