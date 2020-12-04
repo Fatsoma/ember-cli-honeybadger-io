@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-honeybadger-io",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Javascript error tracking with https://www.honeybadger.io",
   "keywords": [
     "ember-addon",
