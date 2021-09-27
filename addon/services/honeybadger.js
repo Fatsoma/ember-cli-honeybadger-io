@@ -66,7 +66,7 @@ export default Service.extend({
 
     window.Honeybadger.configure(config);
     window.Honeybadger.beforeNotify((notice) => {
-      this.get('beforeNotify')(notice);
+      return this.beforeNotify(notice);
     });
   },
 
