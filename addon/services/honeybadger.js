@@ -89,14 +89,21 @@ export default Service.extend({
   },
 
   _getScript() {
+    let config = this._config();
+    let version = config.version || '2.2';
+
     return new Promise((resolve, reject) => {
       let script = document.createElement('script');
 
       script.type = 'text/javascript';
       script.async = true;
-      script.src = '//js.honeybadger.io/v2.2/honeybadger.min.js';
+      script.src = `//js.honeybadger.io/v${version}/honeybadger.min.js`;
       script.onload = resolve;
       script.onerror = reject;
+
+      if (config.environment === 'test') {
+        script.setAttribute('data-test-honeybadger', true);
+      }
 
       document.getElementsByTagName('head')[0].appendChild(script);
     });

@@ -106,4 +106,25 @@ module('Unit | Service | honeybadger', function(hooks) {
 
     assert.ok(window.Honeybadger.calledWith('resetMaxErrors'))
   })
+
+  test('Override config.version', async function(assert) {
+    let service = this.owner.lookup('service:honeybadger');
+
+    sinon.stub(service, '_resolveConfig' ).callsFake(() => {
+      return {
+        honeybadger: {
+          environment: 'test',
+          apiKey: 'test-key',
+          version: '3.0'
+        }
+      };
+    });
+
+    await service._getScript();
+
+    assert.equal(
+      document.querySelector('[data-test-honeybadger]').src,
+      'http://js.honeybadger.io/v3.0/honeybadger.min.js'
+    );
+  })
 });
