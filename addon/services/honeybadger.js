@@ -6,6 +6,7 @@ import { run } from '@ember/runloop';
 import { isPresent } from '@ember/utils';
 import { getOwner } from '@ember/application';
 import { set } from '@ember/object';
+import { deprecate } from '@ember/application/deprecations';
 
 const noop = () => {};
 
@@ -16,7 +17,7 @@ export default Service.extend({
   },
 
   notify(error) {
-    return this._getSDK().then(
+    return this.setup().then(
       () => {
         run(window.Honeybadger, 'notify', error);
       },
@@ -27,7 +28,11 @@ export default Service.extend({
     )
   },
 
-  _getSDK() {
+  resetMaxErrors() {
+    run(window.Honeybadger, 'resetMaxErrors');
+  },
+
+  setup() {
     if (typeof(window.Honeybadger) === 'object') {
       return resolve();
     }
@@ -39,7 +44,20 @@ export default Service.extend({
       }).catch((e) => {
         run(null, reject, e);
       });
-    }, 'service:honeybadger:getSDK');
+    }, 'service:honeybadger:setup');
+  },
+
+  _getSDK() {
+    deprecate(
+      '#_getSDK was made public and renamed to #setup',
+      false,
+      {
+        id: 'ember-cli-honey-badger._getSDK',
+        until: '3.0.0'
+      }
+    );
+
+    return this.setup();
   },
 
   _config() {
@@ -71,14 +89,21 @@ export default Service.extend({
   },
 
   _getScript() {
+    let config = this._config();
+    let version = config.version || '2.2';
+
     return new Promise((resolve, reject) => {
       let script = document.createElement('script');
 
       script.type = 'text/javascript';
       script.async = true;
-      script.src = '//js.honeybadger.io/v2.2/honeybadger.min.js';
+      script.src = `//js.honeybadger.io/v${version}/honeybadger.min.js`;
       script.onload = resolve;
       script.onerror = reject;
+
+      if (config.environment === 'test') {
+        script.setAttribute('data-test-honeybadger', true);
+      }
 
       document.getElementsByTagName('head')[0].appendChild(script);
     });
