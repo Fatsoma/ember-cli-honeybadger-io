@@ -96,4 +96,14 @@ module('Unit | Service | honeybadger', function(hooks) {
       );
     });
   });
+
+  test('#resetMaxErrors', function(assert) {
+    let service = this.owner.lookup('service:honeybadger');
+
+    window.Honeybadger = sinon.stub();
+
+    service.resetMaxErrors();
+
+    assert.ok(window.Honeybadger.calledWith('resetMaxErrors'))
+  })
 });

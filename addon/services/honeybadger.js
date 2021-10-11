@@ -6,6 +6,7 @@ import { run } from '@ember/runloop';
 import { isPresent } from '@ember/utils';
 import { getOwner } from '@ember/application';
 import { set } from '@ember/object';
+import { deprecate } from '@ember/application/deprecations';
 
 const noop = () => {};
 
@@ -16,7 +17,7 @@ export default Service.extend({
   },
 
   notify(error) {
-    return this._getSDK().then(
+    return this.setup().then(
       () => {
         run(window.Honeybadger, 'notify', error);
       },
@@ -27,7 +28,11 @@ export default Service.extend({
     )
   },
 
-  _getSDK() {
+  resetMaxErrors() {
+    run(window.Honeybadger, 'resetMaxErrors');
+  },
+
+  setup() {
     if (typeof(window.Honeybadger) === 'object') {
       return resolve();
     }
@@ -39,7 +44,20 @@ export default Service.extend({
       }).catch((e) => {
         run(null, reject, e);
       });
-    }, 'service:honeybadger:getSDK');
+    }, 'service:honeybadger:setup');
+  },
+
+  _getSDK() {
+    deprecate(
+      '#_getSDK was made public and renamed to #setup',
+      false,
+      {
+        id: 'ember-cli-honey-badger._getSDK',
+        until: '3.0.0'
+      }
+    );
+
+    return this.setup();
   },
 
   _config() {
