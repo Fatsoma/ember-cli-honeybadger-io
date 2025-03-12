@@ -5,7 +5,10 @@
   "keywords": [
     "ember-addon"
   ],
-  "repository": "https://github.com/Fatsoma/ember-cli-honeybadger-io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fatsoma/ember-cli-honeybadger-io.git"
+  },
   "license": "MIT",
   "author": "Fatsoma",
   "directories": {
