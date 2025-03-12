@@ -1,6 +1,6 @@
 # ember-cli-honeybadger-io [![CircleCI](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io.svg?style=svg)](https://circleci.com/gh/Fatsoma/ember-cli-honeybadger-io)
 
-Javascript error tracking with <https://www.honeybadger.io>
+Javascript error tracking with <https://www.honeybadger.io>, simple wrapper service for Ember.js
 
 honeybadger.js docs <https://github.com/honeybadger-io/honeybadger-js>
 
@@ -52,7 +52,7 @@ export function initialize(appInstance) {
       userId: session.userId
     };
 
-    notice.cookies = document.cookies
+    notice.cookies = document.cookies;
   }); */
 }
 
@@ -67,4 +67,11 @@ export default {
 
 honeybadger.js is lazy loaded via `service.notify`.
 
-Addon by [Fatsoma](http://www.fatsoma.com)
+Addon by [Fatsoma](https://www.fatsoma.com)
+
+## Changelog
+
+### 26/9/2024 - 5.0.0
+
+- Upgrade to ember-cli 5.11.0
+- Version number to follow ember-cli 5.x during updates/upgrades

@@ -1,86 +1,65 @@
 import Service from '@ember/service';
-import { assign } from '@ember/polyfills';
-import { assert } from '@ember/debug';
-import { resolve, Promise } from 'rsvp';
-import { run } from '@ember/runloop';
-import { isPresent } from '@ember/utils';
 import { getOwner } from '@ember/application';
-import { set } from '@ember/object';
+import { run } from '@ember/runloop';
+import { resolve, Promise } from 'rsvp';
+import { tracked } from '@glimmer/tracking';
+import { assert } from '@ember/debug';
+import { isPresent } from '@ember/utils';
 
-const noop = () => {};
+export default class HoneybadgerService extends Service {
+  @tracked beforeNotify = () => {};
 
-export default Service.extend({
-  init() {
-    this._super(...arguments);
-    set(this, 'beforeNotify', noop);
-  },
+  async notify(error) {
+    await this.setup();
 
-  notify(error) {
-    return this._getSDK().then(
-      () => {
-        run(window.Honeybadger, 'notify', error);
-      },
-      () => {
-        console.error(`Unable to send error report: ${error}`);
-      },
-      'service:honeybadger.notify'
-    )
-  },
+    run(window.Honeybadger, 'notify', error);
+  }
 
-  _getSDK() {
-    if (typeof(window.Honeybadger) === 'object') {
+  async setup() {
+    if (typeof window.Honeybadger === 'object') {
       return resolve();
     }
 
-    return new Promise((resolve, reject) => {
-      this._getScript().then(() => {
-        this._configure();
-        run(null, resolve);
-      }).catch((e) => {
-        run(null, reject, e);
-      });
-    }, 'service:honeybadger:getSDK');
-  },
+    await this.loadScript();
 
-  _config() {
-    let config = this._resolveConfig();
-    let { honeybadger } = config;
+    this.configure();
+  }
+
+  get config() {
+    let {
+      env: { environment, honeybadger },
+    } = this;
 
     assert(
       'service:honeybadger.config apiKey missing',
-      isPresent(honeybadger.apiKey)
+      isPresent(honeybadger.apiKey),
     );
 
-    return assign(
-      { environment: config.environment },
-      honeybadger
-    );
-  },
+    return { environment, ...honeybadger };
+  }
 
-  _resolveConfig() {
+  get env() {
     return getOwner(this).resolveRegistration('config:environment');
-  },
+  }
 
-  _configure() {
-    let config = this._config();
-
-    window.Honeybadger.configure(config);
+  configure() {
+    window.Honeybadger.configure(this.config);
     window.Honeybadger.beforeNotify((notice) => {
       return this.beforeNotify(notice);
     });
-  },
+  }
 
-  _getScript() {
+  async loadScript() {
     return new Promise((resolve, reject) => {
       let script = document.createElement('script');
 
       script.type = 'text/javascript';
       script.async = true;
-      script.src = '//js.honeybadger.io/v2.2/honeybadger.min.js';
+      script.src = 'https://js.honeybadger.io/v6.10/honeybadger.min.js';
       script.onload = resolve;
       script.onerror = reject;
 
       document.getElementsByTagName('head')[0].appendChild(script);
     });
-  },
-});
+  }
+}
