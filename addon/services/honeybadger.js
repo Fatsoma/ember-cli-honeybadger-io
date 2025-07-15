@@ -21,7 +21,9 @@ export default class HoneybadgerService extends Service {
     return run(window.Honeybadger, 'notifyAsync', error);
   }
 
-  addBreadcrumb(name, options = {}) {
+  async addBreadcrumb(name, options = {}) {
+    await this.setup();
+
     return run(window.Honeybadger, 'addBreadcrumb', name, options);
   }
 

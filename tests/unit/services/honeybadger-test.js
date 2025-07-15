@@ -43,6 +43,8 @@ module('Unit | Service | honeybadger', function (hooks) {
       };
     });
 
+    let setupSpy = sinon.spy(service, 'setup');
+
     await service.notify(error);
 
     let breadcrumb = {
@@ -67,5 +69,7 @@ module('Unit | Service | honeybadger', function (hooks) {
     );
 
     assert.ok(notifyAsync.calledOnceWith(error));
+
+    assert.ok(setupSpy.calledThrice);
   });
 });
