@@ -73,8 +73,9 @@ Addon by [Fatsoma](https://www.fatsoma.com)
 
 ### 15/8/2025 - 5.0.1
 
-- wrap addBreadcrumb and notifyAsync methods
+- wrap `addBreadcrumb` and `notifyAsync` methods
 - bump HB version to v6.11 from v6.10
+- `notify` now returns value
 
 ### 26/9/2024 - 5.0.0
 

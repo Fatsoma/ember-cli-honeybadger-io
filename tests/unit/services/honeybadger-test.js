@@ -45,8 +45,6 @@ module('Unit | Service | honeybadger', function (hooks) {
 
     let setupSpy = sinon.spy(service, 'setup');
 
-    await service.notify(error);
-
     let breadcrumb = {
       name: 'test-breadcrumb',
       options: {
@@ -55,8 +53,8 @@ module('Unit | Service | honeybadger', function (hooks) {
       },
     };
 
-    service.addBreadcrumb(breadcrumb.name, breadcrumb.options);
-
+    await service.addBreadcrumb(breadcrumb.name, breadcrumb.options);
+    await service.notify(error);
     await service.notifyAsync(error);
 
     assert.ok(getScript.calledOnce);

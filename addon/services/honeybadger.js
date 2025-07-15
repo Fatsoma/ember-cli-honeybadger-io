@@ -12,7 +12,7 @@ export default class HoneybadgerService extends Service {
   async notify(error) {
     await this.setup();
 
-    run(window.Honeybadger, 'notify', error);
+    return run(window.Honeybadger, 'notify', error);
   }
 
   async notifyAsync(error) {
