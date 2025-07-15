@@ -15,6 +15,16 @@ export default class HoneybadgerService extends Service {
     run(window.Honeybadger, 'notify', error);
   }
 
+  async notifyAsync(error) {
+    await this.setup();
+
+    return run(window.Honeybadger, 'notifyAsync', error);
+  }
+
+  addBreadcrumb(name, options = {}) {
+    return run(window.Honeybadger, 'addBreadcrumb', name, options);
+  }
+
   async setup() {
     if (typeof window.Honeybadger === 'object') {
       return resolve();
@@ -55,7 +65,7 @@ export default class HoneybadgerService extends Service {
 
       script.type = 'text/javascript';
       script.async = true;
-      script.src = 'https://js.honeybadger.io/v6.10/honeybadger.min.js';
+      script.src = 'https://js.honeybadger.io/v6.11/honeybadger.min.js';
       script.onload = resolve;
       script.onerror = reject;
 

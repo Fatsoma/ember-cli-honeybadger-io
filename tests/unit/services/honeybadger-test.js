@@ -20,7 +20,16 @@ module('Unit | Service | honeybadger', function (hooks) {
     let configure = sinon.stub();
     let beforeNotify = sinon.stub();
     let notify = sinon.stub();
-    let honeybadger = { configure, beforeNotify, notify };
+    let notifyAsync = sinon.stub();
+    let addBreadcrumb = sinon.stub();
+
+    let honeybadger = {
+      configure,
+      beforeNotify,
+      notify,
+      notifyAsync,
+      addBreadcrumb,
+    };
 
     let getScript = sinon.stub(service, 'loadScript').callsFake(() => {
       window.Honeybadger = honeybadger;
@@ -36,9 +45,27 @@ module('Unit | Service | honeybadger', function (hooks) {
 
     await service.notify(error);
 
+    let breadcrumb = {
+      name: 'test-breadcrumb',
+      options: {
+        metadata: { id: 'honeybadger' },
+        category: 'test',
+      },
+    };
+
+    service.addBreadcrumb(breadcrumb.name, breadcrumb.options);
+
+    await service.notifyAsync(error);
+
     assert.ok(getScript.calledOnce);
     assert.ok(configure.calledOnceWith(config));
     assert.ok(beforeNotify.calledOnce);
     assert.ok(notify.calledOnceWith(error));
+
+    assert.ok(
+      addBreadcrumb.calledOnceWith(breadcrumb.name, breadcrumb.options),
+    );
+
+    assert.ok(notifyAsync.calledOnceWith(error));
   });
 });
